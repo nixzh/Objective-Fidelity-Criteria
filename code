@@ -1,0 +1,50 @@
+#include <opencv2/opencv.hpp>
+#include <istream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+using namespace cv;
+
+int main()
+{
+	char k[100], l[100];
+	cout << "请输入第一张图片：" << endl;
+	cin.getline(k, 100);
+	Mat img1 = imread(k);
+	if (img1.empty())
+	{
+		cout << "error!" << endl;
+		return -1;
+	}
+	cout << "请输入第二张图片：" << endl;
+	cin.getline(l, 100);
+	Mat img2 = imread(l);
+	if (img2.empty())
+	{
+		cout << "error!" << endl;
+		return -1;
+	}
+	if (img1.size() != img2.size())
+	{
+		cout << "error!" << endl;
+		return -1;
+	}
+	float e, s;
+	unsigned a=0, b=0;
+	int m = img1.rows, n = img1.cols;
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			a = a + pow((img2.at<uchar>(i, j) - img1.at<uchar>(i, j)), 2);
+			b = b + pow(img2.at<uchar>(i, j), 2);
+		}
+	}
+	e = pow(a / m / n,0.5);
+	s = b / a;
+	cout << "均方根误差=" << e << endl;
+	cout << "信噪比=" << s << endl;
+	waitKey();
+	return 0;
+}
